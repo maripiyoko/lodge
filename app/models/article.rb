@@ -4,6 +4,7 @@ class Article < ActiveRecord::Base
   has_many :comments
   has_many :update_histories
   has_many :notifications
+  has_many :article_notifications
   before_update :create_history
   before_update :create_notification
   has_many :stocked_users,
@@ -29,8 +30,7 @@ class Article < ActiveRecord::Base
   end
 
   def create_history
-    UpdateHistory.create!(
-      article_id: self.id,
+    update_histories.create!(
       old_title: self.old_title,
       old_tags: self.old_tags,
       old_body: self.old_body,
@@ -41,10 +41,9 @@ class Article < ActiveRecord::Base
   end
 
   def create_notification
-    notification = ArticleNotification.create!(
+    notification = article_notifications.create!(
       user_id: self.user_id,
       state: :update,
-      article_id: self.id,
     )
     notification.create_targets_for_stocked_user_by_article(self)
     notification
