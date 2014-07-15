@@ -45,13 +45,22 @@ RSpec.configure do |config|
   #
   # The different available types are documented in the features, such as in
   # https://relishapp.com/rspec/rspec-rails/docs
-  Capybara.default_wait_time = 5
-
   config.infer_spec_type_from_file_location!
 
   config.include Warden::Test::Helpers, type: :feature
 
+  Capybara.default_wait_time = 5
+  Capybara.default_driver = :poltergeist
+
   config.before(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+  end
+  config.before(:suite) do
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.before(:suite, js: true) do
+    Capybara.default_wait_time = 5
     DatabaseCleaner.clean_with(:truncation)
   end
 
@@ -59,7 +68,7 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
   end
 
-  config.before(:each, js: true) do
+  config.before(:each, type: :feature) do
     DatabaseCleaner.strategy = :truncation
   end
 
