@@ -49,8 +49,10 @@ RSpec.configure do |config|
 
   config.include Warden::Test::Helpers, type: :feature
 
-  Capybara.default_wait_time = 5
-  Capybara.default_driver = :poltergeist
+  Capybara.configure do |config|
+    config.default_driver = :poltergeist
+    config.default_wait_time = 5
+  end
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)

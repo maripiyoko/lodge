@@ -34,11 +34,11 @@ feature "EditArticles", :type => :feature do
     expect(page).to have_content("+tag1,tag2")
     expect(page).to have_content("-old body")
     expect(page).to have_content("+body")
-
     logout
+
     login_as stocked_user, scope: :user
     visit root_path
-    click_link "1"
+    find("#num-of-notification").click # TODO: to write more declarative
     expect(page).to have_content(I18n.t("common.notification.article_update", user_name: user.name, article_title: "new article"))
   end
 end
