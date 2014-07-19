@@ -12,9 +12,12 @@ feature "CreateArticles", :type => :feature do
       fill_in I18n.t("activerecord.attributes.article.title"), with: "new article"
       fill_in I18n.t("activerecord.attributes.article.tags"), with: "tag1,tag2"
       fill_in I18n.t("activerecord.attributes.article.body"), with: "body"
+      save_screenshot '/tmp/ss1.png'
       click_button I18n.t("helpers.submit.create")
     }.to change(Article, :count).by(1)
 
+    save_screenshot '/tmp/ss2.png'
+    page.driver.debug
     expect(page).to have_content("new article")
     expect(page).to have_content("tag1")
     expect(page).to have_content("tag2")
