@@ -20,7 +20,11 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
-Capybara.javascript_driver = :poltergeist
+Capybara.register_driver :poltergeist_debug do |app|
+  Capybara::Poltergeist::Driver.new(app, :inspector => true)
+end
+
+Capybara.javascript_driver = :poltergeist_debug
 
 
 RSpec.configure do |config|
@@ -50,7 +54,7 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers, type: :feature
 
   Capybara.configure do |config|
-    config.default_driver = :poltergeist
+    config.default_driver = :poltergeist_debug
     config.default_wait_time = 5
   end
 
